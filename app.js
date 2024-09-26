@@ -14,9 +14,7 @@ const messageEl = document.querySelector("#message");
 //   be called to render this game state.
 
 function init() {
-  //board = Array(9).fill("");
-  board = ["X", "O", "", "", "", "", "", "", ""];
-
+  board = Array(9).fill("");
   turn = "X";
   winner = false;
   tie = false;
@@ -61,6 +59,58 @@ const winningCombos = [
 
 //6) Handle a player clicking a square with a `handleClick` function.
 
+function handleClick(event) {
+  const squareIndex = event.target.id;
+  if (winner || board[squareIndex]) {
+    return;
+  }
+
+  placePiece(squareIndex);
+  checkForWinner();
+  checkForTie();
+  switchPlayerTurn();
+  render();
+}
+
+squareEls.forEach((element) => {
+  element.addEventListener("click", handleClick);
+});
+
+function placePiece(index) {
+  board[index] = turn;
+}
+
+function checkForWinner() {
+  for (let i = 0; i < winningCombos.length; i++) {
+    const [a, b, c] = winningCombos[i];
+    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+      winner = true;
+      break;
+    }
+  }
+}
+
+function checkForTie() {
+  if (winner) {
+    return;
+  }
+
+  tie = !board.includes("");
+}
+
+function switchPlayerTurn() {
+  if (winner) {
+    return;
+  }
+
+  turn = turn === "X" ? "O" : "X";
+}
+
 //7) Create Reset functionality.
 
+resetBtnEl = document.querySelector("#reset");
+
+resetBtnEl.addEventListener("click", init);
+
+// Init game
 init();
