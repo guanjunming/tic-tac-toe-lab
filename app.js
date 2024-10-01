@@ -60,6 +60,10 @@ const winningCombos = [
 //6) Handle a player clicking a square with a `handleClick` function.
 
 function handleClick(event) {
+  if (!event.target.classList.contains("sqr")) {
+    return;
+  }
+
   const squareIndex = event.target.id;
   if (winner || board[squareIndex]) {
     return;
@@ -72,9 +76,7 @@ function handleClick(event) {
   render();
 }
 
-squareEls.forEach((element) => {
-  element.addEventListener("click", handleClick);
-});
+document.querySelector(".board").addEventListener("click", handleClick);
 
 function placePiece(index) {
   board[index] = turn;
